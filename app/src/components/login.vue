@@ -79,8 +79,12 @@ const handleLogin = async () => {
     
       
     } else if (user.role === 'Студент') {
-      router.push('/dashboardStudent')
-    } else {
+      router.push('/dashboardStudent')  
+    } else if (user.role ==='Администратор'){
+      router.push('/dashboardAdmin')
+    }
+    
+    else {
       router.push('/login')
     }
   } catch (error) {

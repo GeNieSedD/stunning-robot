@@ -81,7 +81,7 @@ model TestTasks {
   img            String?      @db.VarChar(100)
   beginningdate  DateTime
   enddatetime    DateTime
-  time           DateTime
+  time           Int
   teacherid      Int
 
   groups         Groups      @relation(fields: [groupid], references: [id])
@@ -106,7 +106,6 @@ model Answers {
 
   question Questions @relation("questionsAnswers", fields: [questionid], references: [id]) // Изменено с questionId
 }
-
 model Grades {
   id        Int      @id @default(autoincrement())
   studentid Int      @db.SmallInt 

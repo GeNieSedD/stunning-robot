@@ -13,6 +13,9 @@ content{
 html, body, div#app {
     height: 100vh;
     max-width: 1920px;
+    display: flex;
+    gap: 24px;
+    background-color: var(--card-background_gray_fill);
 } 
 .form {
     display: flex;
