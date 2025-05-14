@@ -1,183 +1,187 @@
 * {
-    margin: 0px;
-    padding: 0px;
-  }
-  body {
-    background-color: var(--card-background_gray_fill);
-    width: 100%;
-    display: flex;
-  }
-  main {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding-block: 44px;
-    width: 100%;
-  }
-  .heading-question {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .constructor-test {
-    padding: var(--padding-internal-primary-card);
-    background-color: var(--card-background_white_fill);
-  }
-  .question {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-external-primary);
-  }
-  .heading {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .content-question {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-  .description {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-external-secondary);
-  }
-  .constructor-answers {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-external-secondary);
-  }
-  .answers {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-external-secondary-2);
-  }
-  .constructor-test {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-button-primary);
-    overflow-y: auto;
-  }
-  a {
-    text-decoration: none;
-    color: var(--text-background_blue_text);
-  }
-  .constructor-test {
-    border-radius: 8px;
-    background: var(--card-background_white_fill, #fff);
-  }
-  #popUp-hint {
-    cursor: pointer;
-    color: var(--text-background_blue_text);
-  }
-  footer {
-    display: flex;
-    max-width: 487px;
-    min-width: 300px;
-    padding: 24px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    background-color: var(--card-background_white_fill);
-  }
-  .setting-test {
-    display: flex;
-    padding: 20px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-    align-self: stretch;
-    border-radius: 8px;
-    border-radius: 8px;
-    background: var(--card-background_gray_fill, #fafafa);
-  }
-  .inputs {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .input-label {
-    gap: 12px;
-    min-width: 150px;
-    flex: 1;
-  }
-  .information-test {
-    display: flex;
-    padding: 20px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-    align-self: stretch;
-    border-radius: 8px;
-    border-radius: 8px;
-    background: var(--card-background_gray_fill, #fafafa);
-    height: 100%;
-  }
-  .update-test {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    align-self: stretch;
-  }
-  .information-test .input-label#description .answers {
-    display: flex;
-    height: 80px;
-    padding: 12px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 10px;
-    align-self: stretch;
-  }
-  .information-test .button {
-    margin-top: auto;
-    width: 100%;
-  }
-  .upload-box {
-    display: flex;
-    height: 290px;
-    padding: 20px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    align-self: stretch;
-    border-radius: 4px;
-    border: 1px solid var(--other-background_blue_block, #455db4);
-    background: var(--other-background_light-blue_block, #ebf2ff);
-  }
-  .upload-box:hover {
-    background-color: #e0efff;
-  }
-  .upload-box img {
-    background-size: cover;
-    background-position: center;
-  }
-  .upload-box.dragover {
-    background-color: #cce7ff;
-    border-color: #1e40af;
-  }
-  input[type="file"] {
-    display: none;
-  }
-  .pop-up {
-    display: none;
-  }
-  .pop-up-active {
-    display: flex;
-  }
-  html, body, div#app {
-    height: 100vh;
-    width: 100% !important;
-    display: flex !important;
-  } 
-  div#app{
-    display: flex;
-    gap: var(--gap-external_card);
-    height: 100vh;
-    width: 100%;
-    display: flex;
-  }
+  margin: 0px;
+  padding: 0px;
+}
+.template {
+  display: flex;
+  gap: 24px;
+  height: 100vh;
+}
+body {
+  background-color: var(--card-background_gray_fill);
+  width: 100%;
+  display: flex;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-block: 44px;
+  width: 100%;
+}
+.heading-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.constructor-test {
+  padding: var(--padding-internal-primary-card);
+  background-color: var(--card-background_white_fill);
+}
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-external-primary);
+}
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.content-question {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-external-secondary);
+}
+.constructor-answers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-external-secondary);
+}
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-external-secondary-2);
+}
+.constructor-test {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-button-primary);
+  overflow-y: auto;
+}
+a {
+  text-decoration: none;
+  color: var(--text-background_blue_text);
+}
+.constructor-test {
+  border-radius: 8px;
+  background: var(--card-background_white_fill, #fff);
+}
+#popUp-hint {
+  cursor: pointer;
+  color: var(--text-background_blue_text);
+}
+footer {
+  display: flex;
+  max-width: 487px;
+  min-width: 300px;
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: var(--card-background_white_fill);
+}
+.setting-test {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  border-radius: 8px;
+  border-radius: 8px;
+  background: var(--card-background_gray_fill, #fafafa);
+}
+.inputs {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.input-label {
+  gap: 12px;
+  min-width: 150px;
+  flex: 1;
+}
+.information-test {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  border-radius: 8px;
+  border-radius: 8px;
+  background: var(--card-background_gray_fill, #fafafa);
+  height: 100%;
+}
+.update-test {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+.information-test .input-label#description .answers {
+  display: flex;
+  height: 80px;
+  padding: 12px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  align-self: stretch;
+}
+.information-test .button {
+  margin-top: auto;
+  width: 100%;
+}
+.upload-box {
+  display: flex;
+  height: 290px;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  align-self: stretch;
+  border-radius: 4px;
+  border: 1px solid var(--other-background_blue_block, #455db4);
+  background: var(--other-background_light-blue_block, #ebf2ff);
+}
+.upload-box:hover {
+  background-color: #e0efff;
+}
+.upload-box img {
+  background-size: cover;
+  background-position: center;
+}
+.upload-box.dragover {
+  background-color: #cce7ff;
+  border-color: #1e40af;
+}
+.pop-up {
+  display: none;
+}
+.pop-up-active {
+  display: flex;
+}
+html,
+body,
+div#app {
+  height: 100vh;
+  width: 100% !important;
+  display: flex !important;
+}
+div#app {
+  display: flex;
+  gap: var(--gap-external_card);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}

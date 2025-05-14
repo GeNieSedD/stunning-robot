@@ -35,7 +35,7 @@
                 </div>
                 <a href="/register"><p class="texting-1">Нет аккаунта?</p></a>
             </section>
-            <button class="button button-primary">Войти</button>
+            <button class="button button-primary healding-3">Войти</button>
         </form>
     </div>
         <img src="../img/Login Art.jpg" alt="">
@@ -79,8 +79,12 @@ const handleLogin = async () => {
     
       
     } else if (user.role === 'Студент') {
-      router.push('/dashboardStudent')
-    } else {
+      router.push('/dashboardStudent')  
+    } else if (user.role ==='Администратор'){
+      router.push('/groupAdmin')
+    }
+    
+    else {
       router.push('/login')
     }
   } catch (error) {

@@ -1,0 +1,150 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+.template {
+  display: flex;
+  gap: 24px;
+  background: var(--card-background_gray_fill, #fafafa);
+  height: 100vh;
+  padding-right: 24px;
+}
+.journal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: scroll;
+  flex: 1;
+}
+header {
+  display: flex;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 0px 8px 0px 8px;
+  background: var(--light-version-White, #fff);
+  
+}
+.data {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.filters {
+  display: flex;
+  width: 516px;
+  align-items: flex-start;
+  gap: 16px;
+  justify-content: end;
+}
+.diary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  align-self: stretch;
+}
+.header-tab {
+  display: flex;
+  padding: 6px 16px;
+  align-items: center;
+  gap: 24px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: var(--card-background_white_fill, #fff);
+}
+#number {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  padding: 6px 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.information {
+  display: flex;
+  width: 312px;
+  align-items: center;
+  gap: 10px;
+}
+.content {
+  display: flex;
+  padding: 16px;
+  align-items: start;
+  gap: 24px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: var(--card-background_white_fill, #fff);
+}
+/* Компоненты оценки */
+.cell {
+  max-width: 28px !important;
+  height: 32px !important;
+  box-sizing: border-box;
+  padding: 0px !important;
+  border: 1px solid var(--text-background_light-gray_text);
+  text-align: center;
+  border-radius: 4px;
+  transition: 0.2s;
+  outline: none;
+}
+.cell:hover {
+  background: var(--card-background_dark-gray_fill, #f2f4f7);
+  border: 1px solid var(--other-background_white-blue_block, #7094f4);
+}
+.cell:focus {
+  background: var(--card-background_dark-gray_fill, #f2f4f7);
+  border: 1px solid var(--other-background_blue_block, #455db4);
+  background-color: none;
+}
+/* Компоненты дата */
+.data-atoms {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 0 0;
+}
+.atom {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+.info-users {
+  display: flex;
+  width: 312px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.user {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+.table {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  flex: 1;
+  gap: 16px;
+}
+.row-cell {
+  display: flex;
+  justify-content: space-between;
+  height: 32px;
+  flex: 1;
+  width: 100%;
+}

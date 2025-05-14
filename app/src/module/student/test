@@ -1,0 +1,433 @@
+<template>
+  <div class="template">
+    <div class="menu">
+      <div class="info-test">
+        <div class="info-time">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="17"
+            viewBox="0 0 16 17"
+            fill="none"
+          >
+            <path
+              d="M6.6665 1.83337H9.33317M7.99984 9.83337L9.99984 7.83337M13.3332 9.83337C13.3332 12.7789 10.9454 15.1667 7.99984 15.1667C5.05432 15.1667 2.6665 12.7789 2.6665 9.83337C2.6665 6.88785 5.05432 4.50004 7.99984 4.50004C10.9454 4.50004 13.3332 6.88785 13.3332 9.83337Z"
+              stroke="#3D3D3D"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <h3 class="healding-3">Время выполнения</h3>
+          <span id="time" class="texting-1">{{ displayTestTime }}</span>
+        </div>
+        <h3 class="healding-3" id="colorBlue">{{ displayTestTitle }}</h3>
+      </div>
+      <nav class="cards-question">
+        <div
+          v-for="(question, index) in questionsAll"
+          :key="question.id"
+          class="card"
+          :class="{ 'card-is-active': currentQuestionIndex === index }"
+          @click="selectQuestionByIndex(index)"
+        >
+          <h3 class="healding-3">Вопрос {{ index + 1 }}</h3>
+          <span class="texting-2">{{
+            question.description || question.text || "Загрузка..."
+          }}</span>
+        </div>
+        <div v-if="!questionsAll.length">
+          <p>Загрузка списка вопросов...</p>
+        </div>
+      </nav>
+    </div>
+
+    <main
+      class="content-test"
+      v-if="currentQuestionObject && questionsAll.length > 0"
+    >
+      <div class="test-texting">
+        <h2 class="healding-1">
+          Вопрос {{ currentQuestionIndex + 1 }} из {{ questionsAll.length }}
+        </h2>
+        <h1 class="big-healding">
+          {{
+            currentQuestionObject.text ||
+            currentQuestionObject.description ||
+            "Текст вопроса загружается..."
+          }}
+        </h1>
+      </div>
+
+      <div class="display-test">
+        <div class="img-container" v-if="currentQuestionObject.image_url">
+          <img
+            :src="currentQuestionObject.image_url"
+            alt="Изображение к вопросу"
+            class="question-image"
+          />
+        </div>
+
+        <div class="answers">
+          <div
+            v-for="answer in currentQuestionAnswers"
+            :key="answer.id"
+            class="tab texting-3"
+            :class="{ 'answer-selected': selectedAnswerId === answer.id }"
+            @click="handleAnswerSelect(answer)"
+          >
+            {{ answer.text || "Вариант ответа..." }}
+          </div>
+          <div v-if="!currentQuestionAnswers.length && currentQuestionObject">
+            <p class="texting-3">Загрузка вариантов ответов...</p>
+          </div>
+          <div
+            v-if="
+              currentQuestionAnswers.length === 0 &&
+              currentQuestionObject &&
+              !isLoadingAnswers
+            "
+          >
+            <p class="texting-3">Для этого вопроса нет вариантов ответов.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          class="button button-secondary healding-3"
+          @click="finishTest"
+          v-if="
+            currentQuestionIndex >= questionsAll.length - 1 && selectedAnswerId
+          "
+        >
+          Завершить тест
+        </button>
+        <button
+          class="button button-primary healding-3"
+          @click="goToNextQuestion"
+          :disabled="!selectedAnswerId"
+          v-if="currentQuestionIndex < questionsAll.length - 1"
+        >
+          Ответить на вопрос
+        </button>
+      </div>
+    </main>
+
+    <main
+      class="content-test"
+      v-else-if="questionsAll.length > 0 && !currentQuestionObject"
+    >
+      <h2 class="healding-1">Выберите вопрос из списка слева, чтобы начать.</h2>
+    </main>
+
+    <main class="content-test" v-else>
+      <h2 class="healding-1">Загрузка теста...</h2>
+    </main>
+
+    <div v-if="finalGrade" class="result">
+      <h2 class="healding-1">{{ finalGrade }}</h2>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, watch } from "vue";
+import http from "@/http-common";
+import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+const currentTestId = route.params.testId;
+
+// Reactive references for test data and state
+const testDetails = ref(null);
+const questionsAll = ref([]);
+const user = ref(null);
+
+const currentQuestionIndex = ref(-1);
+const currentQuestionAnswers = ref([]);
+const selectedAnswerId = ref(null);
+const isLoadingAnswers = ref(false);
+const userAnswers = ref({});
+const correctAnswers = ref({});
+const finalGrade = ref(null);
+
+// Computed property for the current question object
+const currentQuestionObject = computed(() => {
+  if (
+    currentQuestionIndex.value >= 0 &&
+    questionsAll.value.length > currentQuestionIndex.value
+  ) {
+    return questionsAll.value[currentQuestionIndex.value];
+  }
+  return null;
+});
+
+// Computed properties for displaying test time and title
+const displayTestTime = computed(
+  () => testDetails.value?.time || "Загрузка времени..."
+);
+const displayTestTitle = computed(
+  () => testDetails.value?.title || "Загрузка названия..."
+);
+
+// Fetch test details
+const fetchTestDetails = async (idOfTest) => {
+  try {
+    const res = await http(`/createTest/test/${idOfTest}`);
+    testDetails.value = res.data || null;
+  } catch (error) {
+    console.error("Ошибка при получении информации о тесте", error);
+    testDetails.value = null;
+  }
+};
+
+// Fetch all questions
+const fetchQuestionsAll = async (idOfTest) => {
+  try {
+    const res = await http(`/createTest/tests/${idOfTest}/questions`);
+    questionsAll.value = res.data || [];
+    if (questionsAll.value.length > 0) {
+      selectQuestionByIndex(0);
+    } else {
+      currentQuestionIndex.value = -1;
+    }
+  } catch (error) {
+    console.error("Ошибка при получении вопросов", error);
+    questionsAll.value = [];
+    currentQuestionIndex.value = -1;
+  }
+};
+
+// Fetch answers for a specific question
+const fetchAnswersForQuestion = async (questionId) => {
+  if (!questionId) {
+    console.warn("Нет questionId для загрузки ответов.");
+    currentQuestionAnswers.value = [];
+    return;
+  }
+  isLoadingAnswers.value = true;
+  currentQuestionAnswers.value = [];
+  try {
+    const res = await http(`/createTest/questions/${questionId}`);
+    currentQuestionAnswers.value = res.data || [];
+    // Сохраняем правильный ответ
+    // ИЗМЕНИТЬ ЗДЕСЬ: answer.correct на answer.iscorrect
+    const correctAnswer = res.data.find((answer) => answer.iscorrect);
+    if (correctAnswer) {
+      correctAnswers.value[questionId] = correctAnswer.id;
+    }
+  } catch (error) {
+    console.error(
+      `Ошибка при получении ответов для вопроса ${questionId}`,
+      error
+    );
+    currentQuestionAnswers.value = [];
+  } finally {
+    isLoadingAnswers.value = false;
+  }
+};
+
+// Select a question by index
+const selectQuestionByIndex = (index) => {
+  if (index >= 0 && index < questionsAll.value.length) {
+    currentQuestionIndex.value = index;
+    // Если пользователь уже отвечал на этот вопрос, восстановим выбор
+    const qId = questionsAll.value[index].id;
+    selectedAnswerId.value = userAnswers.value[qId] || null;
+  }
+};
+
+const selectedFullAnswer = ref(null);
+
+// Handle answer selection
+const handleAnswerSelect = (selectedAnswerObject) => {
+  console.log("Текст выбранного ответа:", selectedAnswerObject.text);
+  selectedAnswerId.value = selectedAnswerObject.id; // По-прежнему сохраняем ID для :class и другой логики
+  selectedFullAnswer.value = selectedAnswerObject;
+};
+
+// Proceed to the next question
+const goToNextQuestion = () => {
+  if (!selectedAnswerId.value || !currentQuestionObject.value) return;
+  userAnswers.value[currentQuestionObject.value.id] = selectedAnswerId.value;
+
+  if (currentQuestionIndex.value < questionsAll.value.length - 1) {
+    selectQuestionByIndex(currentQuestionIndex.value + 1);
+  } else {
+    finishTest();
+  }
+};
+
+// Final grade calculation
+const finishTest = async () => {
+  // Делаем функцию асинхронной
+  if (currentQuestionObject.value && selectedAnswerId.value) {
+    userAnswers.value[currentQuestionObject.value.id] = selectedAnswerId.value;
+  }
+
+  const totalQuestions = questionsAll.value.length;
+  let correctCount = 0;
+
+  for (const questionId in userAnswers.value) {
+    if (
+      String(userAnswers.value[questionId]) ===
+      String(correctAnswers.value[questionId])
+    ) {
+      correctCount++;
+    }
+  }
+
+  const scorePercentage =
+    totalQuestions > 0 ? (correctCount / totalQuestions) * 100 : 0;
+  let numericGradeValue;
+
+  // Определяем числовую оценку
+  if (scorePercentage < 50) {
+    finalGrade.value = "Оценка: 2";
+    numericGradeValue = 2;
+  } else if (scorePercentage >= 50 && scorePercentage < 70) {
+    // Пример измененных диапазонов
+    finalGrade.value = "Оценка: 3";
+    numericGradeValue = 3;
+  } else if (scorePercentage >= 70 && scorePercentage < 90) {
+    finalGrade.value = "Оценка: 4";
+    numericGradeValue = 4;
+  } else {
+    // >= 90
+    finalGrade.value = "Оценка: 5";
+    numericGradeValue = 5;
+  }
+  // Пересмотрите вашу логику выставления оценок, если нужно.
+  // Эта логика:
+  // < 50 -> 2
+  // 50-69 -> 3
+  // 70-89 -> 4
+  // >= 90 -> 5
+
+  console.log(
+    "Тест завершен! Финальные ответы пользователя:",
+    userAnswers.value
+  );
+  console.log(
+    "Процент правильных:",
+    scorePercentage,
+    "Оценка:",
+    finalGrade.value
+  );
+
+  // --- Начало отправки оценки на сервер ---
+  if (user.value && user.value.id && numericGradeValue !== undefined) {
+    const gradeData = {
+      // Все данные в теле запроса
+      studentId: user.value.id,
+      grade: numericGradeValue,
+      date: new Date().toISOString(),
+      testId: currentTestId ? parseInt(currentTestId, 10) : null,
+      testTitle: testDetails.value?.title || null,
+    };
+
+    try {
+      console.log("Отправка данных оценки:", gradeData);
+      const response = await http.post("/createGrades", gradeData); // Укажите правильный URL вашего API
+      console.log("Оценка успешно отправлена на сервер:", response.data);
+      alert(`Тест завершен! ${finalGrade.value}\nОценка сохранена в журнале.`);
+    } catch (error) {
+      console.error(
+        "Ошибка при отправке оценки на сервер:",
+        error.response?.data || error.message
+      );
+      alert(
+        `Тест завершен! ${
+          finalGrade.value
+        }\nНе удалось сохранить оценку в журнале. ${
+          error.response?.data?.message || ""
+        }`
+      );
+    }
+  } else {
+    if (!user.value || !user.value.id) {
+      console.warn("Не удалось отправить оценку: пользователь не определен.");
+      alert(
+        `Тест завершен! ${finalGrade.value}\nНе удалось сохранить оценку: информация о пользователе отсутствует.`
+      );
+    } else {
+      alert(
+        `Тест завершен! ${finalGrade.value}\nОценка не была отправлена (не определено значение).`
+      );
+    }
+  }
+  // --- Конец отправки оценки на сервер ---
+
+  router.push("/dashboardStudent"); // Перенаправление
+};
+// Watcher to fetch answers when a new question is selected
+watch(
+  currentQuestionObject,
+  (newQuestion) => {
+    if (newQuestion && newQuestion.id) {
+      fetchAnswersForQuestion(newQuestion.id);
+    } else {
+      currentQuestionAnswers.value = [];
+    }
+  },
+  { immediate: false }
+);
+
+// Init on mount
+onMounted(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    try {
+      user.value = JSON.parse(storedUser);
+    } catch (error) {
+      console.error("Ошибка парсинга пользователя из localStorage:", error);
+      user.value = null;
+    }
+  } else {
+    console.warn("Нет сохранённого пользователя в localStorage");
+  }
+
+  if (currentTestId) {
+    fetchTestDetails(currentTestId);
+    fetchQuestionsAll(currentTestId);
+  } else {
+    console.error("Test ID не найден в параметрах роута!");
+  }
+});
+</script>
+
+<style scoped>
+@import "./UI/test.css";
+
+/* Исправление: pointer + явная разблокировка кликов */
+.answers .tab {
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 4px;
+  border: 1px solid var(--other-backgroud_light-gray_block, #d0d5dd);
+  background: var(--card-background_gray_fill, #fafafa);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+}
+
+.answer-selected {
+  background-color: #e0f7fa !important;
+  border: 2px solid #00acc1 !important;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.result {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4caf50;
+}
+</style>

@@ -2,7 +2,7 @@
 	"name": "Fullstack Vue + Express",
 	"dockerComposeFile": ["../docker-compose.yml"],
 	"service": "api",
-	"workspaceFolder": "/workspace/api",
+	"workspaceFolder": "/workspaces/stunning-robot"	,
 	"forwardPorts": [8080, 8081, 5050],
 	"features": {
 	  "ghcr.io/devcontainers/features/docker-in-docker:2": {}

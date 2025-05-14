@@ -1,34 +1,47 @@
-.pop-up{
-    display: flex;
-    width: 400px;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 16px;
-    background: var(--Base-White, #FFF);
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    gap: 12px;
+.pop-up {
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 16px;
+  background: var(--Base-White, #fff);
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  gap: 12px;
 
-/* Shadow/xl */
-box-shadow: 0px 20px 24px -4px rgba(10, 13, 18, 0.10), 0px 8px 8px -4px rgba(10, 13, 18, 0.04);
+  /* Shadow/xl */
+  box-shadow: 0px 20px 24px -4px rgba(10, 13, 18, 0.1),
+    0px 8px 8px -4px rgba(10, 13, 18, 0.04);
 }
-.pop-up .circle{
-    border-radius: 100%;
-    height: 32px;
-    width: 32px;
+.pop-up .circle {
+  border-radius: 100%;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-div.popup{
+div.popup {
   padding: 20px;
 }
-.popup.success .circle { background-color: #4CAF50; }
-.popup.error .circle{ background-color: #F44336; }
-.popup.warning .circle{ background-color: #FFC107; color: #333; }
+.popup.success .circle {
+  background-color: #4caf50;
+}
+.popup.error .circle {
+  background-color: #f44336;
+}
+.popup.warning .circle {
+  background-color: #ffc107;
+  color: #333;
+}
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.4s;
-  }
-  .fade-enter-from, .fade-leave-to {
-    opacity: 0;
-  }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
